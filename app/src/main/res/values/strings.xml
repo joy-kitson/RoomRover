@@ -3,4 +3,5 @@
     <string name="no_arrow">No arrow(s) pressed</string>
     <string name="left_arrow">&lt;</string>
     <string name="right_arrow">&gt;</string>
+    <string name="bt_header">Discovered Devices:</string>
 </resources>
