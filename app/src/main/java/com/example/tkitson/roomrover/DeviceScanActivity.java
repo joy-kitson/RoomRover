@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Contacts;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -34,6 +35,13 @@ public class DeviceScanActivity extends ListActivity {
 
         public DeviceScanAdapter(@NonNull Context context, int resource) {
             super(context, resource, devices);
+        }
+
+        @Override
+        public void add(@Nullable BluetoothDevice object) {
+            super.add(object);
+            Toast toast = Toast.makeText(DeviceScanActivity.this, "adding device", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

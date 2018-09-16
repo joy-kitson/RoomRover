@@ -26,22 +26,13 @@ public class RoverMain extends AppCompatActivity {
         bluetooth_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(RoverMain.this, "switching to DeviceScanActivity", Toast.LENGTH_SHORT);
-                toast.show();
+                //Toast toast = Toast.makeText(RoverMain.this, "switching to DeviceScanActivity", Toast.LENGTH_SHORT);
+                //toast.show();
 
                 //switch to the device scanning activity when the button is pressed
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Toast toast = Toast.makeText(RoverMain.this, "switched to DeviceScanActivity", Toast.LENGTH_SHORT);
-                        //toast.show();
-                        Intent deviceScanIntent =
-                                new Intent(RoverMain.this, DeviceScanActivity.class);
-                        RoverMain.this.startActivity(deviceScanIntent);
-                    }
-                },2000);
+                Intent deviceScanIntent =
+                        new Intent(RoverMain.this, DeviceScanActivity.class);
+                RoverMain.this.startActivity(deviceScanIntent);
             }
         });
 
