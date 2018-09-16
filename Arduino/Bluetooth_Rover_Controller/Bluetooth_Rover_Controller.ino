@@ -21,6 +21,9 @@ Servo servoRight;  // create servo object to control a servo
 #define BACKWARD 1475
 #define STILL 1500
 
+const int trigPin = 7;
+const int echoPin = 6;
+
 int moveDirection = 0; // 0 is none, 1 is FORWARD, 2 back, 3 left, 4 right
 
 unsigned int remainingMoveTime = 0; // number of milliseconds to keep moving in the current state
@@ -39,11 +42,14 @@ BLEPeripheral myDevice;
 //TODO: Add our sensor characteristics
 
 // sensor data is read only
-//BLEUnsignedLongCharacteristic ultrasonicReading("19B10000-E8F2-537E-4F6C-D104768A1214", BLERead);
+BLEUnsignedLongCharacteristic ultrasonicReading("19B10000-E8F2-537E-4F6C-D104768A1214", BLERead);
 
 
 void setup()
 {
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 
   // initialize Serial for debugging
   Serial.begin(9600);
@@ -63,6 +69,9 @@ void setup()
   myDevice.addAttribute(moveBackward);
   myDevice.addAttribute(turnLeft);
   myDevice.addAttribute(turnRight);
+
+  // add read only ultrasonic reading.
+  myDevice.addAttribute(ultrasonicReading);
 
 
   // assign event handlers for connected, disconnected to peripheral
@@ -94,6 +103,9 @@ void setup()
 void loop()
 {
   //myDevice.poll();
+
+  // update the ultrasonicReading repeatedly.
+  ultrasonicReading.setValue(getDistance());
 
   if(moveDirection > 0)
   {
@@ -131,6 +143,8 @@ void loop()
       moveDirection = 0;
     } 
   }
+
+  delay(500);
   //delay(5000);
 }
 
@@ -197,4 +211,20 @@ void turnRightCharacteristicWritten(BLECentral& central, BLECharacteristic& char
 
     remainingMoveTime = millis() + turnRight.value();
   } 
+}
+
+unsigned long getDistance()
+{
+  unsigned long duration;
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH); //73 microseconds per inchd
+
+  Serial.println("Distance: " + String(duration));
+
+  return duration;
 }
