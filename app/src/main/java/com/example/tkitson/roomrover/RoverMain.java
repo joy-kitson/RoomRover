@@ -31,13 +31,13 @@ public class RoverMain extends AppCompatActivity {
         });
 
         //setup the arrow buttons
-        Button left_arrow_button = findViewById(R.id.left_arrow_button);
-        Button right_arrow_button = findViewById(R.id.right_arrow_button);
-
-        Button up_arrow_button = findViewById(R.id.up_arrow_button);
-        Button down_arrow_button = findViewById(R.id.down_arrow_button);
-
-        left_arrow_button.setOnClickListener(textViewUpdater);
-        right_arrow_button.setOnClickListener(textViewUpdater);
+        int[] button_ids = {R.id.left_arrow_button,
+                            R.id.right_arrow_button,
+                            R.id.up_arrow_button,
+                            R.id.down_arrow_button};
+        for (int i = 0; i < button_ids.length; i++){
+            Button button = findViewById(button_ids[i]);
+            button.setOnClickListener(textViewUpdater);
+        }
     }
 }
