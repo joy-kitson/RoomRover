@@ -25,47 +25,22 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 //based on example from:
 //https://developer.android.com/guide/topics/connectivity/bluetooth-le
 public class DeviceScanActivity extends ListActivity {
     private ArrayList<BluetoothDevice> devices;
 
-    private ArrayList<String> stringDevices;
-
     private BluetoothAdapter bluetoothAdapter;
     private boolean isScanning;
     private Handler handler;
     private DeviceScanAdapter deviceScanAdapter;
-    private DeviceStringAdapter deviceStringAdapter;
 
     private ListView listView;
 
-
-    private class DeviceStringAdapter extends ArrayAdapter<String> {
-        static final int resource = R.layout.bt_row_layout;
-
-        public DeviceStringAdapter(@NonNull Context context, int resource) {
-            super(context, resource, stringDevices);
-        }
-
-        @Override
-        public void add(@Nullable String object) {
-            super.add(object);
-            Toast toast = Toast.makeText(DeviceScanActivity.this, "adding device", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(resource, parent, false);
-            TextView nameView = (TextView)rowView.findViewById(R.id.bt_text_view);
-            nameView.setText(getItem(position));
-            return rowView;
-        }
-    }
+    static final UUID[] SERVICE_UUIDS =
+            {new UUID(0x19b10000e8f2537eL,0x4f6cd104768a1214L)};
 
 
     private class DeviceScanAdapter extends ArrayAdapter<BluetoothDevice> {
@@ -83,23 +58,32 @@ public class DeviceScanActivity extends ListActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent)
+        public View getView(final int position, View convertView, ViewGroup parent)
         {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(resource, parent, false);
+
             TextView nameView = (TextView)rowView.findViewById(R.id.bt_text_view);
-            nameView.setText(getItem(position).getName());
+            nameView.setText(getItem(position).getAddress());
+            nameView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //switch to the robot controlling activity when the button is pressed
+                    Intent controllerIntent =
+                            new Intent(DeviceScanActivity.this, ControllerActivity.class);
+                    controllerIntent.putExtra(BluetoothDevice.class.getName(),
+                            getItem(position));
+                    DeviceScanActivity.this.startActivity(controllerIntent);
+                }
+            });
+
+            this.notifyDataSetChanged();
             return rowView;
         }
     }
 
-
-
-
-
-
-    // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
+    // Stops scanning after 1 second.
+    private static final long SCAN_PERIOD = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -111,25 +95,17 @@ public class DeviceScanActivity extends ListActivity {
         toast.show();
         setContentView(R.layout.activity_device_scan);
         devices = new ArrayList<>();
-        //deviceScanAdapter = new DeviceScanAdapter(this, R.layout.bt_row_layout);
-
-        stringDevices = new ArrayList<>();
-        stringDevices.add("Hello");
-        stringDevices.add("there!");
-        deviceStringAdapter = new DeviceStringAdapter(this, R.layout.bt_row_layout);
+        deviceScanAdapter = new DeviceScanAdapter(this, R.layout.bt_row_layout);
 
         listView = (ListView)findViewById(android.R.id.list);
-        listView.setAdapter(deviceStringAdapter);
-        deviceStringAdapter.notifyDataSetChanged();
+        listView.setAdapter(deviceScanAdapter);
+        deviceScanAdapter.notifyDataSetChanged();
 
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
-
         scanForLeDevice(true);
-
-
     }
 
     private void scanForLeDevice(final boolean enable){
@@ -139,10 +115,10 @@ public class DeviceScanActivity extends ListActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //deviceScanAdapter.add(device);
-                        //deviceScanAdapter.notifyDataSetChanged();
-                        deviceStringAdapter.add("Here is a thing");
-                        deviceStringAdapter.notifyDataSetChanged();
+                        deviceScanAdapter.add(device);
+                        deviceScanAdapter.notifyDataSetChanged();
+                        Toast toast = Toast.makeText(DeviceScanActivity.this, "adding device", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 });
             }
@@ -159,7 +135,7 @@ public class DeviceScanActivity extends ListActivity {
             }, SCAN_PERIOD);
 
             isScanning = true;
-            bluetoothAdapter.startLeScan(scanCallback);
+            bluetoothAdapter.startLeScan(SERVICE_UUIDS, scanCallback);
         } else {
             isScanning = false;
             bluetoothAdapter.stopLeScan(scanCallback);

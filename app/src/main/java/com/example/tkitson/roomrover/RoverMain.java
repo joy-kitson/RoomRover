@@ -36,6 +36,7 @@ public class RoverMain extends AppCompatActivity {
             }
         });
 
+        /*
         //setup the arrow buttons
         int[] button_ids = {R.id.left_arrow_button,
                             R.id.right_arrow_button,
@@ -45,5 +46,6 @@ public class RoverMain extends AppCompatActivity {
             Button button = findViewById(button_ids[i]);
             button.setOnClickListener(textViewUpdater);
         }
+        */
     }
 }
