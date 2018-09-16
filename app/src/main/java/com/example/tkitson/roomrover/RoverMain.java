@@ -34,6 +34,9 @@ public class RoverMain extends AppCompatActivity {
         Button left_arrow_button = findViewById(R.id.left_arrow_button);
         Button right_arrow_button = findViewById(R.id.right_arrow_button);
 
+        Button up_arrow_button = findViewById(R.id.up_arrow_button);
+        Button down_arrow_button = findViewById(R.id.down_arrow_button);
+
         left_arrow_button.setOnClickListener(textViewUpdater);
         right_arrow_button.setOnClickListener(textViewUpdater);
     }

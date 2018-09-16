@@ -9,47 +9,83 @@
     <RelativeLayout
         android:id="@+id/arrows"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/text">
+        android:layout_height="227dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
         <LinearLayout
-
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <Button
-                android:id="@+id/left_arrow_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/left_arrow"
-                android:visibility="visible"/>
-
-            <Button
-                android:id="@+id/right_arrow_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/right_arrow"
+                android:id="@+id/up_arrow_button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="∧"
                 android:visibility="visible" />
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/left_arrow_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/left_arrow"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/right_arrow_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="@string/right_arrow"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/down_arrow_button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="∨"
+                android:visibility="visible"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="200dp" />
+
+
         </LinearLayout>
+
     </RelativeLayout>
 
     <TextView
         android:id="@id/text"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="@string/no_arrow"
-        app:layout_constraintTop_toBottomOf="@id/arrows"
-        app:layout_constraintBottom_toTopOf="@id/bluetooth_button"/>
+        app:layout_constraintBottom_toTopOf="@id/bluetooth_button"
+        app:layout_constraintTop_toBottomOf="@id/arrows" />
 
     <Button
         android:id="@+id/bluetooth_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_width="182dp"
+        android:layout_height="108dp"
         android:layout_below="@id/text"
-        app:layout_constraintTop_toBottomOf="@id/text"/>
+        android:layout_marginTop="100dp"
+        android:text="Bluetooth Select"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/text"
+        tools:layout_editor_absoluteX="107dp" />
 
 </android.support.constraint.ConstraintLayout>
